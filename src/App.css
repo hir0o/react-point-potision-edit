@@ -1,0 +1,29 @@
+.main {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background-color: rgb(247, 240, 240);
+}
+
+.selector {
+  background-color: #8cc1893e;
+  position: absolute;
+}
+
+.point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transform: translate(-5px, -5px);
+  background-color: #f0f;
+  border-radius: 50%;
+}
+
+.point[data-enter="true"] {
+  background-color: #f00;
+}
+
+.point[data-selected="true"] {
+  outline: 1px solid #00f;
+  outline-offset: 3px;
+}
