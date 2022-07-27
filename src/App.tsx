@@ -1,5 +1,6 @@
-import { PureComponent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
+import { dummyPoint } from "./dummyPoint";
 
 type Point = {
   x: number;
@@ -14,204 +15,11 @@ type SelectablePoint = Point & {
 
 function App() {
   const [isDrag, setIsDrag] = useState(false);
-  const [isPointDrag, setIsPointDrag] = useState(false);
   const [startPoint, setStartPoint] = useState<Point>({ x: 0, y: 0 });
   const [endPoint, setEndPoint] = useState<Point>({ x: 0, y: 0 });
-  const [startPointDrag, setStartPointDrag] = useState<Point>({ x: 0, y: 0 });
-  const [endPointDrag, setEndPointDrag] = useState<Point>({ x: 0, y: 0 });
   const [targetPointId, setTargetPointId] = useState("");
   const targetPointRef = useRef<HTMLDivElement>(null);
-  const [pointList, setPointList] = useState<SelectablePoint[]>([
-    {
-      id: "point1",
-      x: 400,
-      y: 400,
-      selected: false,
-      target: false,
-    },
-    {
-      id: "point2",
-      x: 500,
-      y: 500,
-      selected: false,
-      target: false,
-    },
-    {
-      id: "point3",
-      x: 600,
-      y: 600,
-      selected: false,
-      target: false,
-    },
-    {
-      id: "point4",
-      x: 700,
-      y: 700,
-      selected: false,
-      target: false,
-    },
-    {
-      id: "point5",
-      x: 800,
-      y: 800,
-      selected: false,
-      target: false,
-    },
-    {
-      id: "point6",
-      selected: false,
-      target: false,
-      x: 514,
-      y: 399,
-    },
-    {
-      id: "point7",
-      selected: false,
-      target: false,
-      x: 932,
-      y: 78,
-    },
-    {
-      id: "point8",
-      selected: false,
-      target: false,
-      x: 430,
-      y: 218,
-    },
-    {
-      id: "point9",
-      selected: false,
-      target: false,
-      x: 200,
-      y: 395,
-    },
-    {
-      id: "point10",
-      selected: false,
-      target: false,
-      x: 383,
-      y: 624,
-    },
-    {
-      id: "point11",
-      selected: false,
-      target: false,
-      x: 581,
-      y: 411,
-    },
-    {
-      id: "point12",
-      selected: false,
-      target: false,
-      x: 427,
-      y: 411,
-    },
-    {
-      id: "point13",
-      selected: false,
-      target: false,
-      x: 384,
-      y: 551,
-    },
-    {
-      id: "point14",
-      selected: false,
-      target: false,
-      x: 284,
-      y: 557,
-    },
-    {
-      id: "point15",
-      selected: false,
-      target: false,
-      x: 353,
-      y: 445,
-    },
-    {
-      id: "point16",
-      selected: false,
-      target: false,
-      x: 353,
-      y: 364,
-    },
-    {
-      id: "point17",
-      selected: false,
-      target: false,
-      x: 378,
-      y: 339,
-    },
-    {
-      id: "point18",
-      selected: false,
-      target: false,
-      x: 508,
-      y: 328,
-    },
-    {
-      id: "point19",
-      selected: false,
-      target: false,
-      x: 572,
-      y: 323,
-    },
-    {
-      id: "point20",
-      selected: false,
-      target: false,
-      x: 640,
-      y: 281,
-    },
-    {
-      id: "point21",
-      selected: false,
-      target: false,
-      x: 615,
-      y: 266,
-    },
-    {
-      id: "point22",
-      selected: false,
-      target: false,
-      x: 523,
-      y: 320,
-    },
-    {
-      id: "point23",
-      selected: false,
-      target: false,
-      x: 441,
-      y: 320,
-    },
-    {
-      id: "point24",
-      selected: false,
-      target: false,
-      x: 307,
-      y: 320,
-    },
-    {
-      id: "point25",
-      selected: false,
-      target: false,
-      x: 486,
-      y: 554,
-    },
-    {
-      id: "point26",
-      selected: false,
-      target: false,
-      x: 848,
-      y: 395,
-    },
-    {
-      id: "point27",
-      selected: true,
-      target: false,
-      x: 848,
-      y: 597,
-    },
-  ]);
+  const [pointList, setPointList] = useState<SelectablePoint[]>(dummyPoint);
 
   const getSelectorStyle = () => {
     if (startPoint.x === endPoint.x && startPoint.y === endPoint.y) {
@@ -246,6 +54,40 @@ function App() {
         height: startPoint.y - endPoint.y,
       };
     }
+  };
+
+  const getBoundingBox = () => {
+    const { xMin, xMax, yMin, yMax } = pointList.reduce(
+      (acc, point) => {
+        if (point.selected) {
+          return {
+            xMin: Math.min(acc.xMin, point.x),
+            xMax: Math.max(acc.xMax, point.x),
+            yMin: Math.min(acc.yMin, point.y),
+            yMax: Math.max(acc.yMax, point.y),
+          };
+        }
+        return acc;
+      },
+      { xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity }
+    );
+
+    return {
+      xMin,
+      xMax,
+      yMin,
+      yMax,
+    };
+  };
+
+  const getBoundingBoxStyle = () => {
+    const { xMin, xMax, yMin, yMax } = getBoundingBox();
+    return {
+      left: xMin - 5,
+      top: yMin - 5,
+      width: xMax - xMin + 10,
+      height: yMax - yMin + 10,
+    };
   };
 
   const isPointEnter = (point: Point) => {
@@ -327,6 +169,7 @@ function App() {
         if (isDrag && targetPointId === "") {
           // 図面をドラッグ
           setEndPoint({ x: e.clientX, y: e.clientY });
+          // ポイントを移動
         } else if (targetPointId !== "" && targetPointRef.current !== null) {
           setEndPoint({ x: 0, y: 0 });
           setStartPoint({ x: 0, y: 0 });
@@ -337,20 +180,20 @@ function App() {
           // 算出したoffsetを元にポイントを移動
           setPointList(
             pointList.map((point) => {
-              if (point.selected) {
-                return {
-                  ...point,
-                  x: point.x + offsetX,
-                  y: point.y + offsetY,
-                };
-              }
-              return point;
+              if (!point.selected) return point;
+              return {
+                ...point,
+                x: point.x + offsetX,
+                y: point.y + offsetY,
+              };
             })
           );
         }
       }}
     >
-      <div className="selector" style={getSelectorStyle()}></div>
+      <div className="selector" style={getSelectorStyle()} />
+      {/* <div className="manager" style={getManagerStyle()} /> */}
+      <div className="bounding-box" style={getBoundingBoxStyle()} />
       {pointList.map((point) => (
         <div
           key={point.id}

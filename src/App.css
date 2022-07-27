@@ -10,6 +10,12 @@
   position: absolute;
 }
 
+.bounding-box {
+  position: absolute;
+  background-color: rgba(248, 0, 0, 0.362);
+  border: 1px dashed red;
+}
+
 .point {
   position: absolute;
   width: 10px;
@@ -22,8 +28,8 @@
 .point[data-enter="true"] {
   background-color: #f00;
 }
-
+/*
 .point[data-selected="true"] {
   outline: 1px solid #00f;
   outline-offset: 3px;
-}
+} */
