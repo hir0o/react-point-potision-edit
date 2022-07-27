@@ -16,6 +16,26 @@
   border: 1px dashed red;
 }
 
+.bounding-box-inner {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.rotate {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 .point {
   position: absolute;
   width: 10px;
